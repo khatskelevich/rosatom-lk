@@ -22,7 +22,9 @@
 
 ## Использование
 
-#### - Открыть директорию `/out`
+#### - Скачать по [ссылке](https://drive.google.com/drive/folders/1cvJXv1EYQADwJkJBBHSlCHWc0yGzJ0vK?usp=sharing)
+#### - Распаковать Архив
+#### - Открыть директорию `/rosatom-win32-x64`
 #### - Запустить файл `rosatom.exe`
 
 ## Разработка
