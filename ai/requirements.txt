@@ -1,0 +1,5 @@
+json
+pandas
+deap
+matplotlib
+seaborn

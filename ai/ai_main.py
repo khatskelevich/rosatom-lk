@@ -32,14 +32,14 @@ class GeneticAlgorithm:
         creator.create("Fitness", base.Fitness, weights=(1.0,))
         creator.create("Individual", list, fitness=creator.Fitness)
         self.toolbox = base.Toolbox()
-        self.toolbox.register("individual", self.individual_from_series_operations)
+        self.toolbox.register("individual", self.individual_from_series_operations, df_series=df_series, df_ovens=df_ovens)
         self.toolbox.register("population", tools.initRepeat, list, self.toolbox.individual)
         self.toolbox.register("mate", tools.cxTwoPoint)
         self.toolbox.register("mutate", tools.mutFlipBit, indpb=0.05)
         self.toolbox.register("select", tools.selTournament, tournsize=3)
         self.toolbox.register("evaluate", self.evaluate)
 
-    def individual_from_series_operations(df_series, df_ovens):
+    def individual_from_series_operations(self, df_series, df_ovens):
         exploded_series = df_series['operations'].explode()
         unique_operations = set(json.dumps(d, sort_keys=True) for d in exploded_series)
 
@@ -59,26 +59,26 @@ class GeneticAlgorithm:
 
         return ind
 
-    def evaluate(ind, df_ovens, df_series):
+    def evaluate(self, ind):
         genotype = ind.genotype
         operation_indices = ind.operation_indices
         unique_ovens = ind.unique_ovens
 
-        df_individual = pd.DataFrame(index=df_series.index, columns=df_ovens.index, data=0)
+        df_individual = pd.DataFrame(index=self.df_series.index, columns=self.df_ovens.index, data=0)
 
         for i, value in enumerate(genotype):
             operation = list(operation_indices.keys())[i % len(operation_indices)]
             oven = unique_ovens[i // len(operation_indices)]
 
             # Skip non-numeric values
-            if not isinstance(df_individual.loc[oven, df_individual.columns[i % len(df_ovens)]], (int, float)):
+            if not isinstance(df_individual.loc[oven, df_individual.columns[i % len(self.df_ovens)]], (int, float)):
                 continue
 
-            df_individual.loc[oven, df_individual.columns[i % len(df_ovens)]] = value
+            df_individual.loc[oven, df_individual.columns[i % len(self.df_ovens)]] = value
 
         fitness = 0
 
-        for index, row in df_series.iterrows():
+        for index, row in self.df_series.iterrows():
             temperature = row['temperature']
             operations = row.get('operations', [])
 
@@ -87,7 +87,7 @@ class GeneticAlgorithm:
                     oven_id = df_individual.loc[index].idxmax()
                     # Convert oven_id to integer before using it as an index
                     oven_id = int(oven_id)
-                    fitness += df_ovens.loc[oven_id, 'start_temp']
+                    fitness += self.df_ovens.loc[oven_id, 'start_temp']
 
         return (fitness,)
 
