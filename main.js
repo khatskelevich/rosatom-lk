@@ -7,9 +7,12 @@ function createWindow() {
         height: 640,
         webPreferences: {
             preload: path.join(__dirname, "preload.js"),
+            devTools: false
         },
+        autoHideMenuBar: true,
     });
 
+    win.removeMenu();
     win.loadFile("dist/index.html");
 }
 

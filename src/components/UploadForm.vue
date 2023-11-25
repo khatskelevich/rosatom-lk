@@ -18,6 +18,12 @@ const submitUpload = () => {
 
 </script>
 <template>
+    <el-steps :space="200" :active="1" finish-status="success" class="steps">
+        <el-step title="Файл получен" />
+        <el-step title="Обрабатывается" />
+        <el-step title="Готово" />
+    </el-steps>
+
     <el-upload
             ref="upload"
             class="upload-form"
@@ -39,6 +45,10 @@ const submitUpload = () => {
 </template>
 
 <style scoped>
+.steps {
+    text-align: center;
+    margin-bottom: 60px;
+}
 .upload-form {
     width: 50%;
 }

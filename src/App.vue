@@ -4,13 +4,14 @@ import BaseHeader from "./components/layout/BaseHeader.vue";
 import GantChart from "./components/GantChart.vue";
 import TimelineChart from "./components/TimelineChart.vue";
 import UploadForm from "./components/UploadForm.vue";
+import Statistic from "./components/Statistic.vue";
 
 let currentIndex = ref(0)
 const changePage = (pageIndex) => {
     currentIndex.value = pageIndex
 }
 
-const components = [TimelineChart, UploadForm]
+const components = [TimelineChart, UploadForm, Statistic]
 </script>
 
 <template>
@@ -21,24 +22,13 @@ const components = [TimelineChart, UploadForm]
         />
     </el-header>
 
-    <el-main>
+    <el-main class="rs-main">
         <component :is="components[currentIndex]"></component>
     </el-main>
 </template>
 
 <style scoped>
-.logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-}
-
-.logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-    filter: drop-shadow(0 0 2em #42b883aa);
+.rs-main {
+    min-height: calc(100vh - 60px);
 }
 </style>
